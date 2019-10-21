@@ -1,26 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import GenerateQuote from './GenerateQuote'
+import DisplayQuote from './DisplayQuote'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+
+class App extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state={
+      quote: {
+        value: '',
+      }
+    }
+  }
+
+  componentDidMount = () => {
+    this.selectQuote();
+  };
+  
+  selectQuote = async() => {
+    // fetch('https://api.chucknorris.io/jokes/random')
+    // .then(rawresponse => rawresponse.json())
+    // .then(response => this.setState({ quote: response }))
+    const rawResponse = await fetch("https://api.chucknorris.io/jokes/random");
+    const response = await rawResponse.json();
+    this.setState({ quote: response});
+  }
+
+  render() {
+    return (
+      <header>
+        <div>
+          <GenerateQuote selectQuote={this.selectQuote} />
+          <DisplayQuote quote={this.state.quote} />
+        </div>
       </header>
-    </div>
-  );
+    )
+  }
 }
 
 export default App;
